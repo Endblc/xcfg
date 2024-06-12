@@ -2,28 +2,15 @@
     "log": {
         "loglevel": "warning"
     },
-    "routing": {
-        "domainStrategy": "IPIfNonMatch",
-        "rules": [
-            {
-                "type": "field",
-                "ip": [
-                    "geoip:cn",
-                    "geoip:private"
-                ],
-                "outboundTag": "block"
-            }
-        ]
-    },
     "inbounds": [
         {
-            "listen": "0.0.0.0", // "0.0.0.0" 表示同时监听IPv4和IPv6
-            "port": 443, // 服务端监听的端口
+            "listen": "0.0.0.0",
+            "port": 443,
             "protocol": "vless",
             "settings": {
                 "clients": [
                     {
-                        "id": "db9af5e6-a4ef-436e-ae7b-3d788f94bf18", // 用户ID，执行 xray uuid 生成，或 1-30 字节的字符串
+                        "id": "94838cf1-91fe-438a-a911-c4656989d84c",
                         "flow": "xtls-rprx-vision"
                     }
                 ],
@@ -31,12 +18,12 @@
                 "fallbacks": [
                     {
                         "dest": "8001",
-                        "xver": 1
+                        "xver": 1 
                     },
                     {
                         "alpn": "h2",
                         "dest": "8002",
-                        "xver": 1
+                        "xver": 1 
                     }
                 ]
             },
@@ -46,11 +33,11 @@
                 "tlsSettings": {
                     "rejectUnknownSni": true,
                     "minVersion": "1.2",
-                    "certificates": [ // 证书文件需要使用fullchain（全SSL证书链），若只包含网站证书，会出现如v2rayN能通，v2rayNG不通的现象
+                    "certificates": [
                         {
                             "ocspStapling": 3600,
-                            "certificateFile": "/etc/ssl/private/fullchain.cer", // 证书文件，通常不区分扩展名
-                            "keyFile": "/etc/ssl/private/private.key" // 私钥文件，通常不区分扩展名
+                            "certificateFile": "/etc/ssl/private/fullchain.cer",
+                            "keyFile": "/etc/ssl/private/private.key"
                         }
                     ]
                 }
@@ -74,13 +61,5 @@
             "protocol": "blackhole",
             "tag": "block"
         }
-    ],
-    "policy": {
-        "levels": {
-            "0": {
-                "handshake": 2, // 连接建立时的握手时间限制，单位为秒，默认值为 4，建议与默认值不同
-                "connIdle": 120 // 连接空闲的时间限制，单位为秒，默认值为 300，建议与默认值不同
-            }
-        }
-    }
+    ]
 }
