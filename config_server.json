@@ -2,6 +2,19 @@
     "log": {
         "loglevel": "warning"
     },
+    "routing": {
+        "domainStrategy": "IPIfNonMatch",
+        "rules": [
+            {
+                "type": "field",
+                "ip": [
+                    "geoip:cn",
+                    "geoip:private"
+                ],
+                "outboundTag": "block"
+            }
+        ]
+    },
     "inbounds": [
         {
             "listen": "0.0.0.0",
@@ -10,7 +23,7 @@
             "settings": {
                 "clients": [
                     {
-                        "id": "94838cf1-91fe-438a-a911-c4656989d84c",
+                        "id": "9fa082a5-8ce5-4a5e-ac70-6b8628f0d9fb",
                         "flow": "xtls-rprx-vision"
                     }
                 ],
@@ -18,12 +31,12 @@
                 "fallbacks": [
                     {
                         "dest": "8001",
-                        "xver": 1 
+                        "xver": 1
                     },
                     {
                         "alpn": "h2",
                         "dest": "8002",
-                        "xver": 1 
+                        "xver": 1
                     }
                 ]
             },
@@ -33,11 +46,11 @@
                 "tlsSettings": {
                     "rejectUnknownSni": true,
                     "minVersion": "1.2",
-                    "certificates": [
+                    "certificates": [ 
                         {
                             "ocspStapling": 3600,
                             "certificateFile": "/etc/ssl/private/fullchain.cer",
-                            "keyFile": "/etc/ssl/private/private.key"
+                            "keyFile": "/etc/ssl/private/private.key" 
                         }
                     ]
                 }
@@ -61,5 +74,13 @@
             "protocol": "blackhole",
             "tag": "block"
         }
-    ]
+    ],
+    "policy": {
+        "levels": {
+            "0": {
+                "handshake": 2, 
+                "connIdle": 120 
+            }
+        }
+    }
 }
